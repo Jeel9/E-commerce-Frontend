@@ -6,9 +6,12 @@ import Breadcrumbs from "../../components/pageProps/Breadcrumbs";
 import { resetCart } from "../../redux/orebiSlice";
 import { emptyCart } from "../../assets/images/index";
 import ItemCard from "./ItemCard";
+import { ToastContainer, toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const products = useSelector((state) => state.orebiReducer.products);
   const [totalAmt, setTotalAmt] = useState("");
   const [shippingCharge, setShippingCharge] = useState("");
@@ -29,8 +32,90 @@ const Cart = () => {
       setShippingCharge(20);
     }
   }, [totalAmt]);
+
+  let placeOrder = async () => {
+    if (localStorage.getItem("token") == null) {
+      toast.error("Not authorized. Please signin or signup", {
+        position: "top-left",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    } else {
+      let response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/order`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          token: localStorage.getItem("token"),
+          productId: Array.from(products).map((product) => product._id),
+          quantity: Array.from(products).map((product) => product.quantity),
+          productSum: totalAmt,
+          shippingSum: shippingCharge,
+          totalSum: totalAmt + shippingCharge,
+        }),
+      });
+      let data = await response.json();
+      // setProduct(myProduct);
+      if (response.status === 200) {
+        toast.success(
+          data.success + ". Redirecting you to order history page",
+          {
+            position: "top-left",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          }
+        );
+        dispatch(resetCart());
+        setTimeout(() => {
+          navigate("/orderhistory");
+        }, 3000);
+      } else {
+        toast.error(data.error, {
+          position: "top-left",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        if (
+          data.error === "Token has expired" ||
+          data.error === "Token is invalid"
+        ) {
+          localStorage.removeItem("token");
+          setTimeout(() => {
+            navigate("/signin");
+          }, 3000);
+        }
+      }
+    }
+  };
+
   return (
     <div className="max-w-container mx-auto px-4">
+      <ToastContainer
+        position="top-left"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <Breadcrumbs title="Cart" />
       {products.length > 0 ? (
         <div className="pb-20">
@@ -75,28 +160,29 @@ const Cart = () => {
                 <p className="flex items-center justify-between border-[1px] border-gray-400 border-b-0 py-1.5 text-lg px-4 font-medium">
                   Subtotal
                   <span className="font-semibold tracking-wide font-titleFont">
-                    ${totalAmt}
+                    Rs. {totalAmt}
                   </span>
                 </p>
                 <p className="flex items-center justify-between border-[1px] border-gray-400 border-b-0 py-1.5 text-lg px-4 font-medium">
                   Shipping Charge
                   <span className="font-semibold tracking-wide font-titleFont">
-                    ${shippingCharge}
+                    Rs. {shippingCharge}
                   </span>
                 </p>
                 <p className="flex items-center justify-between border-[1px] border-gray-400 py-1.5 text-lg px-4 font-medium">
                   Total
                   <span className="font-bold tracking-wide text-lg font-titleFont">
-                    ${totalAmt + shippingCharge}
+                    Rs. {totalAmt + shippingCharge}
                   </span>
                 </p>
               </div>
               <div className="flex justify-end">
-                <Link to="/orderplaced">
-                  <button className="w-52 h-10 bg-primeColor text-white hover:bg-black duration-300">
-                    Buy now
-                  </button>
-                </Link>
+                <button
+                  className="w-52 h-10 bg-primeColor text-white hover:bg-black duration-300"
+                  onClick={placeOrder}
+                >
+                  Buy now
+                </button>
               </div>
             </div>
           </div>

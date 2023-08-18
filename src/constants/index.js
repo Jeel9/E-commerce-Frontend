@@ -26,19 +26,9 @@ export const navBarList = [
     link: "/shop",
   },
   {
-    _id: 1003,
-    title: "Cart",
-    link: "/cart",
-  },
-  {
     _id: 1004,
     title: "Order History",
     link: "/orderhistory",
-  },
-  {
-    _id: 1005,
-    title: "Profile",
-    link: "/signin",
   },
 ];
 // =================== NavBarList End here ======================

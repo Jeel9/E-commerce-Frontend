@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import ReactPaginate from "react-paginate";
 import Product from "../../home/Products/Product";
-import { paginationItems } from "../../../constants";
+// import { paginationItems } from "../../../constants";
 
-const items = paginationItems;
+// const items = paginationItems;
 function Items({ currentItems }) {
   return (
     <>
@@ -12,12 +12,11 @@ function Items({ currentItems }) {
           <div key={item._id} className="w-full">
             <Product
               _id={item._id}
-              img={item.img}
-              productName={item.productName}
+              img={item.url}
+              productName={item.product_name}
               price={item.price}
               color={item.color}
-              badge={item.badge}
-              des={item.des}
+              category={item.category}
             />
           </div>
         ))}
@@ -25,7 +24,7 @@ function Items({ currentItems }) {
   );
 }
 
-const Pagination = ({ itemsPerPage }) => {
+const Pagination = ({ items, itemsPerPage }) => {
   // Here we use item offsets; we could also use page offsets
   // following the API or data you're working with.
   const [itemOffset, setItemOffset] = useState(0);
@@ -43,9 +42,6 @@ const Pagination = ({ itemsPerPage }) => {
   const handlePageClick = (event) => {
     const newOffset = (event.selected * itemsPerPage) % items.length;
     setItemOffset(newOffset);
-    // console.log(
-    //   `User requested page number ${event.selected}, which is offset ${newOffset},`
-    // );
     setItemStart(newOffset);
   };
 

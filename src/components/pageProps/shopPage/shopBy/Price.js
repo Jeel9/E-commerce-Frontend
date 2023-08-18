@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import NavTitle from "./NavTitle";
 
-const Price = () => {
+const Price = ({ filters, setFilters, fetchedProducts, setProducts }) => {
   const priceList = [
     {
       _id: 950,
@@ -34,6 +34,22 @@ const Price = () => {
       priceTwo: 1000.0,
     },
   ];
+
+  const changeProducts = (priceOne, priceTwo) => {
+    setFilters({ ...filters, priceOne: priceOne, priceTwo: priceTwo });
+
+    setProducts(
+      fetchedProducts.filter((product) => {
+        if (filters.color && product.color !== filters.color) return false;
+        if (filters.category && product.category !== filters.category)
+          return false;
+        if (filters.priceOne && product.price <= filters.priceOne) return false;
+        if (filters.priceTwo && product.price >= filters.priceTwo) return false;
+        return true;
+      })
+    );
+  };
+
   return (
     <div className="cursor-pointer">
       <NavTitle title="Shop by Price" icons={false} />
@@ -43,8 +59,11 @@ const Price = () => {
             <li
               key={item._id}
               className="border-b-[1px] border-b-[#F0F0F0] pb-2 flex items-center gap-2 hover:text-primeColor hover:border-gray-400 duration-300"
+              onClick={() => {
+                changeProducts(item.priceOne, item.priceTwo);
+              }}
             >
-              ${item.priceOne.toFixed(2)} - ${item.priceTwo.toFixed(2)}
+              Rs. {item.priceOne.toFixed(2)} - Rs. {item.priceTwo.toFixed(2)}
             </li>
           ))}
         </ul>

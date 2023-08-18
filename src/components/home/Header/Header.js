@@ -6,8 +6,11 @@ import { motion } from "framer-motion";
 import { logoLight } from "../../../assets/images";
 import { navBarList } from "../../../constants";
 import Flex from "../../designLayouts/Flex";
+import { FaSearch, FaShoppingCart } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const Header = () => {
+  const products = useSelector((state) => state.orebiReducer.products);
   const [showMenu, setShowMenu] = useState(true);
   const [sidenav, setSidenav] = useState(false);
   const [category, setCategory] = useState(false);
@@ -55,6 +58,26 @@ const Header = () => {
                       <li>{title}</li>
                     </NavLink>
                   ))}
+                  <NavLink
+                    key={Math.ceil(Math.random() * 10000)}
+                    className="flex font-normal hover:font-bold w-20 h-6 justify-center items-center px-12 text-base text-[#767676] hover:underline underline-offset-[4px] decoration-[1px] hover:text-[#262626] md:border-r-[2px] border-r-gray-300 hoverEffect last:border-r-0"
+                    to={localStorage.getItem("token") ? "/logout" : "/signin"}
+                    state={{ data: location.pathname.split("/")[1] }}
+                  >
+                    <li>
+                      {localStorage.getItem("token") ? "Logout" : "Signin"}
+                    </li>
+                  </NavLink>
+                  <div className="flex gap-4 mt-2 lg:mt-0 items-center pr-6 cursor-pointer relative">
+                    <Link to="/cart">
+                      <div className="relative">
+                        <FaShoppingCart />
+                        <span className="absolute font-titleFont top-3 -right-2 text-xs w-4 h-4 flex items-center justify-center rounded-full bg-primeColor text-white">
+                          {products.length > 0 ? products.length : 0}
+                        </span>
+                      </div>
+                    </Link>
+                  </div>
                 </>
               </motion.ul>
             )}

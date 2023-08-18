@@ -1,8 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import NavTitle from "./NavTitle";
 
 const Color = () => {
+  const [colors2, setColors] = useState([]);
+  const fetchColors = async () => {
+    const response = await fetch(
+      `${process.env.REACT_APP_BACKEND_URL}/colorSuggestion`
+    );
+    const data = await response.json();
+    setColors(data.colors);
+  };
+
+  const fetchData = useCallback(async () => {
+    await fetchColors();
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   const [showColors, setShowColors] = useState(true);
   const colors = [
     {
@@ -50,7 +67,7 @@ const Color = () => {
             {colors.map((item) => (
               <li
                 key={item._id}
-                className="border-b-[1px] border-b-[#F0F0F0] pb-2 flex items-center gap-2"
+                className="border-b-[1px] border-b-[#F0F0F0] pb-2 flex items-center gap-2 hover:text-primeColor hover:border-gray-400 duration-300 cursor-pointer"
               >
                 <span
                   style={{ background: item.base }}
