@@ -9,16 +9,14 @@ const Category = ({ filters, setFilters, fetchedProducts, setProducts }) => {
   const [categories, setCategories] = useState([]);
 
   const changeProducts = (my_category) => {
-    // setProducts(fetch_products);
+    let newfilter={ ...filters, category: my_category }
     setFilters({ ...filters, category: my_category });
-    console.log(filters);
-    let my_products = fetchedProducts.filter(function (product) {
-      if (product.color !== filters.color) return false;
-      if (product.category !== my_category) return false;
-      if (product.price !== filters.price) return false;
+    setProducts(fetchedProducts.filter(function (product) {
+      if (newfilter.color && product.color !== newfilter.color) return false;
+      if (newfilter.category && product.category !== my_category) return false;
+      if (newfilter.price && product.price !== newfilter.price) return false;
       return true;
-    });
-    setProducts(my_products);
+    }));
   };
 
   const fetchCategories = async () => {

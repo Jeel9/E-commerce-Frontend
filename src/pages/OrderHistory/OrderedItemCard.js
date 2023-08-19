@@ -1,7 +1,7 @@
 import React from "react";
 import Rating from "./StarRating/starRating";
 
-const OrderedItemCard = ({ item, quantity }) => {
+const OrderedItemCard = ({ userId, item, quantity }) => {
   return (
     <div className="w-full grid grid-cols-6 mb-4 border py-2">
       <div className="flex col-span-5 mdl:col-span-2 items-center gap-4 ml-4">
@@ -18,7 +18,7 @@ const OrderedItemCard = ({ item, quantity }) => {
         <div className="w-1/3 flex items-center font-titleFont font-bold text-lg">
           <p>Rs. {quantity * item.price}</p>
         </div>
-        <Rating product={item} />
+        <Rating product={item} userId={userId}/>
       </div>
     </div>
   );

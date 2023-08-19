@@ -123,6 +123,7 @@ const OrderHistory = () => {
                       {order["products"].map((item, i) => (
                         <div key={item._id.$oid}>
                           <OrderedItemCard
+                            userId={order["userId"]}
                             item={item}
                             quantity={order["quantity"][i]}
                           />

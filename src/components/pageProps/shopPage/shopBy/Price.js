@@ -36,15 +36,15 @@ const Price = ({ filters, setFilters, fetchedProducts, setProducts }) => {
   ];
 
   const changeProducts = (priceOne, priceTwo) => {
+    let newfilter={ ...filters, priceOne: priceOne, priceTwo: priceTwo }
     setFilters({ ...filters, priceOne: priceOne, priceTwo: priceTwo });
-
     setProducts(
       fetchedProducts.filter((product) => {
-        if (filters.color && product.color !== filters.color) return false;
-        if (filters.category && product.category !== filters.category)
+        if (newfilter.color && product.color !== newfilter.color) return false;
+        if (newfilter.category && product.category !== newfilter.category)
           return false;
-        if (filters.priceOne && product.price <= filters.priceOne) return false;
-        if (filters.priceTwo && product.price >= filters.priceTwo) return false;
+        if (newfilter.priceOne && product.price <= priceOne) return false;
+        if (newfilter.priceTwo && product.price >= priceTwo) return false;
         return true;
       })
     );

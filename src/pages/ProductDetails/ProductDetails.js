@@ -25,9 +25,12 @@ const ProductDetails = () => {
         <div className="w-full mx-auto border-b-[1px] border-b-gray-300">
           <div className="max-w-container mx-auto px-4">
             <div className="xl:-mt-10 -mt-7">
-              <Breadcrumbs title="" prevLocation={prevLocation} />
+              <Breadcrumbs title="" prevLocation={location.state.item.productName} />
             </div>
             <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-4 h-full -mt-5 xl:-mt-8 pb-10 bg-gray-100 p-4">
+              <div className="h-full">
+                <ProductsOnSale />
+              </div>
               <div className="h-full xl:col-span-2">
                 <img
                   className="w-full h-full object-cover"

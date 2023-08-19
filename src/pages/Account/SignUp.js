@@ -14,6 +14,7 @@ const SignUp = () => {
   const [favoriteColor, setFavoriteColor] = useState("");
   const [favoriteColorList, setFavoriteColorList] = useState([]);
   const [colorSuggestions, setColorSuggestions] = useState([]);
+  // const [colorHexSuggestions, setColorHexSuggestions] = useState([]);
   const [favoriteCategory, setFavoriteCategory] = useState("");
   const [favoriteCategoryList, setFavoriteCategoryList] = useState([]);
   const [categorySuggestions, setCategorySuggestions] = useState([]);
@@ -25,7 +26,8 @@ const SignUp = () => {
       `${process.env.REACT_APP_BACKEND_URL}/colorSuggestion`
     );
     const data = await response.json();
-    setColorSuggestions(data.colors);
+    setColorSuggestions(Array.from(data.colors).map((color,index)=> ({"color": color, "color_hex":data.color_hex[index]})))
+    // setColorHexSuggestions(data.color_hex);
   };
 
   const fetchCategorySuggestions = async () => {
@@ -95,7 +97,7 @@ const SignUp = () => {
       if (
         username &&
         password &&
-        password.length >= 6 &&
+        password.length >= 1 &&
         age &&
         gender &&
         Array.isArray(favoriteColorList) &&
@@ -170,6 +172,20 @@ const SignUp = () => {
       }
     }
   };
+
+  const ColorDisplay = ({ hexCode }) => {
+    console.log(hexCode);
+    const colorStyle = {
+      backgroundColor: hexCode,
+      width: '100px',
+      height: '100px',
+      border: '1px solid #ccc',
+    };
+
+    return <div style={colorStyle}>Hi</div>;
+  };
+
+
   return (
     <div className="w-full h-screen flex items-center justify-start">
       <ToastContainer
@@ -279,7 +295,11 @@ const SignUp = () => {
               />
               <datalist id="colorList">
                 {colorSuggestions.map((color) => (
-                  <option value={color}></option>
+                    <div>
+                      <option value={color.color}></option>
+                      {/* <p>{color.color_hex}</p> */}
+                      <ColorDisplay hexCode={color.color_hex} />     
+                    </div>           
                 ))}
               </datalist>
               <div

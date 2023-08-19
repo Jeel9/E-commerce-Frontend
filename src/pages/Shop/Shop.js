@@ -91,7 +91,7 @@ const Shop = () => {
           <Breadcrumbs title="Products" />
           <div className="w-full h-full flex pb-20 gap-10">
             <div className="w-[20%] lgl:w-[25%] hidden mdl:inline-flex h-full">
-              {console.log(products)}
+              {/* {console.log(products)} */}
               <ShopSideNav
                 filters={filters}
                 setFilters={setFilters}
