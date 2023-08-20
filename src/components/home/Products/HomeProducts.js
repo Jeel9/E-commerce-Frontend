@@ -69,20 +69,26 @@ const HomeProducts = (props) => {
             Add to cart
           </button>
         </div>
-        <div className="mt-4">
-          <p className="text-[#767676] text-[14px] my-1">
-            <strong>Recommendation Score:</strong>{" "}
-            {props.recommendation_score.toFixed(2)}
-          </p>
-          <p className="text-[#767676] text-[14px] my-1">
-            <strong>Popularity Score:</strong>{" "}
-            {props.popularity_score.toFixed(2)}
-          </p>
-          <p className="text-[#767676] text-[14px] my-1">
-            <strong>Recommendation Score:</strong>{" "}
-            {props.preference_score.toFixed(2)}
-          </p>
-        </div>
+        {props.recommendation_score &&
+        props.popularity_score &&
+        props.preference_score ? (
+          <div className="mt-4">
+            <p className="text-[#767676] text-[14px] my-1">
+              <strong>Recommendation Score:</strong>{" "}
+              {props.recommendation_score.toFixed(2)}
+            </p>
+            <p className="text-[#767676] text-[14px] my-1">
+              <strong>Popularity Score:</strong>{" "}
+              {props.popularity_score.toFixed(2)}
+            </p>
+            <p className="text-[#767676] text-[14px] my-1">
+              <strong>Recommendation Score:</strong>{" "}
+              {props.preference_score.toFixed(2)}
+            </p>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );
