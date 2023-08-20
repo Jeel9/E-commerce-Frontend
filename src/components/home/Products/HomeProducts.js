@@ -85,7 +85,7 @@ const HomeProducts = (props) => {
               {props.popularity_score.toFixed(2)}
             </p>
             <p className="text-[#767676] text-[14px] my-1">
-              <strong>Recommendation Score:</strong>{" "}
+              <strong>Preference Score:</strong>{" "}
               {props.preference_score.toFixed(2)}
             </p>
           </div>
