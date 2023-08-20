@@ -26,7 +26,12 @@ const SignUp = () => {
       `${process.env.REACT_APP_BACKEND_URL}/colorSuggestion`
     );
     const data = await response.json();
-    setColorSuggestions(Array.from(data.colors).map((color,index)=> ({"color": color, "color_hex":data.color_hex[index]})))
+    setColorSuggestions(
+      Array.from(data.colors).map((color, index) => ({
+        color: color,
+        color_hex: data.color_hex[index],
+      }))
+    );
     // setColorHexSuggestions(data.color_hex);
   };
 
@@ -173,19 +178,6 @@ const SignUp = () => {
     }
   };
 
-  const ColorDisplay = ({ hexCode }) => {
-    console.log(hexCode);
-    const colorStyle = {
-      backgroundColor: hexCode,
-      width: '100px',
-      height: '100px',
-      border: '1px solid #ccc',
-    };
-
-    return <div style={colorStyle}>Hi</div>;
-  };
-
-
   return (
     <div className="w-full h-screen flex items-center justify-start">
       <ToastContainer
@@ -295,11 +287,9 @@ const SignUp = () => {
               />
               <datalist id="colorList">
                 {colorSuggestions.map((color) => (
-                    <div>
-                      <option value={color.color}></option>
-                      {/* <p>{color.color_hex}</p> */}
-                      <ColorDisplay hexCode={color.color_hex} />     
-                    </div>           
+                  <option key={color.color} value={color.color}>
+                    {color.color}
+                  </option>
                 ))}
               </datalist>
               <div
@@ -310,14 +300,29 @@ const SignUp = () => {
               </div>
               <div className="">
                 {favoriteColorList.map((colorInList) => {
-                  return (
-                    <span
-                      key={colorInList}
-                      className="bg-cyan-300 font-semibold cursor-pointer w-fit p-1 rounded-md my-2 mr-3"
-                    >
-                      {colorInList}
-                    </span>
+                  const selectedColor = colorSuggestions.find(
+                    (color) => color.color === colorInList
                   );
+                  if (selectedColor) {
+                    const colorStyle = {
+                      backgroundColor: selectedColor.color_hex,
+                      color: "white",
+                      padding: "2px 6px",
+                      borderRadius: "4px",
+                      margin: "2px",
+                    };
+
+                    return (
+                      <span
+                        key={colorInList}
+                        className="font-semibold cursor-pointer w-fit rounded-md my-2 mr-3"
+                        style={colorStyle}
+                      >
+                        {colorInList}
+                      </span>
+                    );
+                  }
+                  return null;
                 })}
               </div>
             </div>
