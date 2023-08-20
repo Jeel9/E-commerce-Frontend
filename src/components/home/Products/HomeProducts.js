@@ -69,9 +69,12 @@ const HomeProducts = (props) => {
             Add to cart
           </button>
         </div>
-        {props.recommendation_score &&
-        props.popularity_score &&
-        props.preference_score ? (
+        {props.recommendation_score != null &&
+        props.recommendation_score != undefined &&
+        props.popularity_score != null &&
+        props.popularity_score != undefined &&
+        props.preference_score != null &&
+        props.preference_score != undefined ? (
           <div className="mt-4">
             <p className="text-[#767676] text-[14px] my-1">
               <strong>Recommendation Score:</strong>{" "}
